@@ -1,5 +1,4 @@
 import sys
-from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow, QProgressBar, QLineEdit, QLabel, QPushButton
 from PyQt5.QtCore import QSize
 from pymed import PubMed
@@ -9,6 +8,9 @@ class Example(QMainWindow):
 
     def __init__(self):
         super().__init__()
+
+        self.total_results_count = 0
+        self.max_count = 20
 
         self.pubmed = PubMed(tool="MyTool", email="my@email.address")
 
@@ -38,12 +40,19 @@ class Example(QMainWindow):
         self.show()
 
     def click_method(self):
-        results = self.pubmed.getTotalResultsCount(self.line.text())
-        print(results)
-        self.handle_timer(results)
+        input_text = self.line.text()
+        self.total_results_count = self.pubmed.getTotalResultsCount(input_text)
+        result = self.pubmed.query(input_text, max_results=self.max_count)
+        print(result)
+        self.handle_timer(result)
 
-    def handle_timer(self, results):
-        self.pbar.setValue(results)
+    def handle_timer(self, result):
+        percent = self.get_percent()
+        print(percent)
+        self.pbar.setValue(percent)
+
+    def get_percent(self):
+        return round((self.max_count * 100) / self.total_results_count)
 
 
 if __name__ == '__main__':
