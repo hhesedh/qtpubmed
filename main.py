@@ -15,7 +15,7 @@ class Example(QMainWindow):
         self.pubmed = PubMed(tool="MyTool", email="my@email.address")
 
         self.setMinimumSize(QSize(320, 140))
-        self.setWindowTitle("PyQt Line Edit example (textfield) - pythonprogramminglanguage.com")
+        self.setWindowTitle("Pubmed Qt")
 
         self.nameLabel = QLabel(self)
         self.nameLabel.setText('Name:')
@@ -43,10 +43,9 @@ class Example(QMainWindow):
         input_text = self.line.text()
         self.total_results_count = self.pubmed.getTotalResultsCount(input_text)
         result = self.pubmed.query(input_text, max_results=self.max_count)
-        print(result)
-        self.handle_timer(result)
+        self.handle_timer()
 
-    def handle_timer(self, result):
+    def handle_timer(self):
         percent = self.get_percent()
         print(percent)
         self.pbar.setValue(percent)
